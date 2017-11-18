@@ -6,7 +6,6 @@ use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
 use App\Product;
 use Illuminate\Http\Request;
-
 class ProductController extends Controller
 {
     public function __construct()
@@ -85,8 +84,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
-    }
+        $request['detail']=$request->description;
+        
+        $product->update($request->all());
+        return response([
+            'data' => new ProductResource($product)
+            ],201);
+        
+    }    
 
     /**
      * Remove the specified resource from storage.
