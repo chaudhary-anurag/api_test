@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product\ProductResource;
+use App\Exceptions\ProductNotBelongsToException;
 use App\Http\Resources\Product\ProductCollection;
 use App\Product;
 use Illuminate\Http\Request;
+use Auth;
 class ProductController extends Controller
 {
     public function __construct()
@@ -83,7 +85,8 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
-    {
+    { 
+        $this->ProductUserCheck($product);
         $request['detail']=$request->description;
         
         $product->update($request->all());
@@ -103,5 +106,13 @@ class ProductController extends Controller
     {
         $product->delete();
         return response(null,204);
+    }
+
+    public function ProductUserCheck($product)
+    {
+        if(Auth::id()!==$product->user_id)
+        {
+            throw new ProductNotBelongsToException;
+        }
     }
 }

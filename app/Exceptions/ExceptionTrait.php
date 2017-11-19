@@ -20,8 +20,8 @@ trait ExceptionTrait
 
 				],404);
 		
-      }
-		return parent::render($request,$exception);
+         }
+		return parent::render($request,$e);
 
 	}
 
